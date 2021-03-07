@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div id="container"></div>
+    <p>The value is: <span id="txtValue"></span></p>
+    <button id="btnReset">Reset Cookie</button>
+    <script>
+      (function (d) {
+        function setCookie(key, value, days) {
+          var expires = "";
+          if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+            expires = "; expires=" + date.toUTCString();
+          }
+          d.cookie = key + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(key) {
+          var ret = null;
+          d.cookie.split(";").map((cookiePart) => {
+            cookiePart
+              .trim()
+              .split("=")
+              .reduce((name, val) => {
+                if (key == name.trim()) ret = val;
+              });
+          });
+          return ret;
+        }
+        function deleteCookie(name) {
+          d.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        }
+
+        function displayValueByCookieName(name) {
+          let jwValue = getCookie(name);
+          console.log(jwValue);
+          d.getElementById("txtValue").innerText = jwValue;
+        }
+
+        function startProgram() {
+          // check whether cookie exist
+          var jwValue = getCookie(cookieName);
+
+          if (jwValue == null || jwValue == "") {
+            // for the first time user, save initialValue in the cookie
+            setCookie(cookieName, "" + initialValue, expireDays);
+          } else {
+            //for previous user, add +1 to the previous value
+            jwValue = parseInt(jwValue) + 1;
+            setCookie(cookieName, jwValue, expireDays);
+          }
+          //show the value in UI
+          displayValueByCookieName(cookieName);
+        }
+
+        const cookieName = "jwValue";
+        const expireDays = 7;
+        const initialValue = 0; // initial value is 0
+
+        startProgram();
+
+        d.getElementById("btnReset").addEventListener("click", function () {
+          deleteCookie(cookieName);
+          startProgram();
+        });
+      })(document);
+    </script>
+  </body>
+</html>
