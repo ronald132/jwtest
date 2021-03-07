@@ -11,24 +11,24 @@
     <button id="btnReset">Reset Cookie</button>
     <script>
       (function (d) {
-        function setCookie(key, value, days) {
+        function setCookie(name, value, days) {
           var expires = "";
           if (days) {
             var date = new Date();
             date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
             expires = "; expires=" + date.toUTCString();
           }
-          d.cookie = key + "=" + (value || "") + expires + "; path=/";
+          d.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
-        function getCookie(key) {
+        function getCookie(name) {
           var ret = null;
           d.cookie.split(";").map((cookiePart) => {
             cookiePart
               .trim()
               .split("=")
-              .reduce((name, val) => {
-                if (key == name.trim()) ret = val;
+              .reduce((k, v) => {
+                if (name == k.trim()) ret = v;
               });
           });
           return ret;
@@ -37,7 +37,7 @@
           d.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
         }
 
-        function displayValueByCookieName(name) {
+        function displayValueByCookiename(name) {
           let jwValue = getCookie(name);
           console.log(jwValue);
           d.getElementById("txtValue").innerText = jwValue;
@@ -56,7 +56,7 @@
             setCookie(cookieName, jwValue, expireDays);
           }
           //show the value in UI
-          displayValueByCookieName(cookieName);
+          displayValueByCookiename(cookieName);
         }
 
         const cookieName = "jwValue";
